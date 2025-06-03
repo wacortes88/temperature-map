@@ -89,7 +89,8 @@
         "esri/widgets/Expand",
         "esri/core/reactiveUtils",
         "esri/core/promiseUtils",
-        "esri/Color"
+        "esri/Color",
+		"esri/widgets/Print"
       ], (
         Map,
         MapView,
@@ -102,7 +103,8 @@
         Expand,
         reactiveUtils,
         promiseUtils,
-        Color
+        Color,
+		Print
       ) => {
         // Project base layer (world countries) to Equal Earth projection
         const baseLayer = new FeatureLayer({
@@ -254,8 +256,20 @@
             expanded: false,
             expandIcon: "graph-bar"
           }),
-          "top-right"
+          "bottom-right"
         );
+		
+		  view.when(() => {
+          const print = new Print({
+            view: view,
+            // specify your own print service
+            printServiceUrl:
+              "https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
+          });
+
+          // Add widget to the top right corner of the view
+          view.ui.add(print, "top-right");
+        });
 
         // This slider will allow the user to update the renderer based on a
         // provided year between 1880 and 2018
